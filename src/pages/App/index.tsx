@@ -1,5 +1,11 @@
+import { Input } from "@chakra-ui/react";
+
 function App() {
-	return <div>Olá mundo</div>;
+	return (
+		<div>
+			<Input placeholder="Basic usage" />
+		</div>
+	);
 }
 
 export default App;
