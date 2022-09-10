@@ -28,11 +28,7 @@ export function ProcessForm() {
 						<Input placeholder="Assunto" />
 						<Flex justify="space-between" w="full" mt="10!important">
 							<Button colorScheme={"red"}>Reset</Button>
-							<ButtonGroup
-								isAttached
-								alignSelf="end"
-
-								colorScheme="main">
+							<ButtonGroup isAttached alignSelf="end" colorScheme="main">
 								<Button>Criar</Button>
 								<IconButton
 									aria-label="adiciona mais um processo"
