@@ -1,10 +1,13 @@
-import { Input } from "@chakra-ui/react";
+import { Flex } from "@chakra-ui/react";
+import { Outlet } from "react-router-dom";
+import { NavBar } from "../../components/NavBar";
 
 function App() {
 	return (
-		<div>
-			<Input placeholder="Basic usage" />
-		</div>
+		<Flex>
+			<NavBar />
+			<Outlet />
+		</Flex>
 	);
 }
 
