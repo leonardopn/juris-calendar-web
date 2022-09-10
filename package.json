@@ -16,6 +16,7 @@
 		"@chakra-ui/react": "^2.3.2",
 		"@emotion/react": "^11.10.4",
 		"@emotion/styled": "^11.10.4",
+		"@hookform/devtools": "^4.2.2",
 		"@iconify/react": "^4.0.0",
 		"@reduxjs/toolkit": "^1.8.5",
 		"framer-motion": "^7.3.2",
