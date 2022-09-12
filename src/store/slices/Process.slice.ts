@@ -16,12 +16,19 @@ const initialState: ProcessState = {
 	error: null,
 };
 
+function findIndex(collection: Process[], id: string) {
+	return collection.findIndex(item => item.id === id);
+}
+
 export const ProcessSlice = createSlice({
 	name: "process",
 	initialState,
 	reducers: {
-		addProcess: (state, action: PayloadAction<Process>) =>
-			update(state, { process: { $push: [action.payload] } }),
+		addProcess: (state, action: PayloadAction<Process>) => {
+			if (findIndex(state.process, action.payload.id) === -1) {
+				return update(state, { process: { $push: [action.payload] } });
+			}
+		},
 		setHasError: (state, action: PayloadAction<ProcessError>) =>
 			update(state, { error: { $set: action.payload } }),
 		setFetching: (state, action: PayloadAction<boolean>) =>
