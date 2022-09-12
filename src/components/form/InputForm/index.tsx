@@ -41,7 +41,7 @@ export function InputForm<T extends FieldValues>({
 					onValueChange={(e: NumberFormatValues) => onChange(e.formattedValue)}
 				/>
 			) : (
-				<Input {...fieldRest} {...fieldRest} ref={ref} onChange={onChange} />
+				<Input {...rest} {...fieldRest} ref={ref} onChange={onChange} />
 			)}
 			{!!error && <FormErrorMessage fontWeight={"bold"}>{error.message}</FormErrorMessage>}
 		</FormControl>
