@@ -12,7 +12,7 @@ import { Link } from "react-router-dom";
 
 export function NavBar() {
 	return (
-		<VStack p={3} w="80" bg="purple.300" h="100vh" color="white">
+		<VStack p={3} w="80" bg="purple.300" h="100vh" color="white" paddingY="10">
 			<Accordion allowToggle w="full">
 				<AccordionItem flex="1">
 					<AccordionButton fontWeight="bold">
