@@ -1,11 +1,17 @@
 import { configureStore } from "@reduxjs/toolkit";
-import { serializableMiddleware } from "./middlewares/serializableMiddleware";
-import processSlice from "./slices/Process.slice";
+import { persistReducer, persistStore } from "redux-persist";
+import { rootPersistConfig, rootReducer } from "./reducers";
 
 export const store = configureStore({
-	reducer: { process: processSlice },
-	middleware: [serializableMiddleware],
+	reducer: persistReducer(rootPersistConfig, rootReducer),
+	middleware: getDefaultMiddleware =>
+		getDefaultMiddleware({
+			serializableCheck: false,
+			immutableCheck: false,
+		}),
 });
+
+export const persistor = persistStore(store);
 
 export type RootState = ReturnType<typeof store.getState>;
 
