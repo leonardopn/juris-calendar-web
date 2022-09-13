@@ -1,8 +1,7 @@
 export interface Memorandum {
 	id: string;
 	destiny: string;
-	processId: string;
-	returnDate: Date;
+	returnDate: string;//NOTE: Em formato ISO
 	isReturned: boolean;
 	returnId?: string;
 	createdAt: Date;
