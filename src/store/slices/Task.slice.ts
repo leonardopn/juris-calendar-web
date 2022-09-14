@@ -1,6 +1,7 @@
 import type { PayloadAction } from "@reduxjs/toolkit";
 import { createSlice } from "@reduxjs/toolkit";
 import update from "immutability-helper";
+import { Memorandum } from "../../@types/Memorandum";
 import { Task } from "../../@types/Task";
 import { TaskError } from "../../errors/TaskError";
 
@@ -29,6 +30,24 @@ export const TaskSlice = createSlice({
 				return update(state, { tasks: { $push: [action.payload] } });
 			}
 		},
+		addMemorandum: (
+			state,
+			action: PayloadAction<{ memorandum: Memorandum; taskId: string }>
+		) => {
+			const processIndex = findIndex(state.tasks, action.payload.taskId);
+			if (processIndex !== -1) {
+				const updatedProcess = update(state, {
+					tasks: {
+						[processIndex]: { memorandums: { $push: [action.payload.memorandum] } },
+					},
+				});
+				return update(updatedProcess, {
+					tasks: {
+						[processIndex]: { updatedAt: { $set: new Date() } },
+					},
+				});
+			}
+		},
 		setHasError: (state, action: PayloadAction<TaskError>) =>
 			update(state, { error: { $set: action.payload } }),
 		setFetching: (state, action: PayloadAction<boolean>) =>
@@ -36,6 +55,6 @@ export const TaskSlice = createSlice({
 	},
 });
 
-export const { addTask, setFetching, setHasError } = TaskSlice.actions;
+export const { addTask, addMemorandum, setFetching, setHasError } = TaskSlice.actions;
 
 export default TaskSlice.reducer;
