@@ -19,13 +19,6 @@ export const MEMORANDUM_VALIDATION = yup
 	.object({
 		id: yup.string().required("O número é obrigatório"),
 		destiny: yup.string().required("O destino é obrigatório"),
-		process: yup
-			.object({
-				value: yup.string(),
-				label: yup.string(),
-			})
-			.required("O processo é obrigatório")
-			.nullable(true),
 		returnDate: yup
 			.string()
 			.required("A data de retorno é obrigatória")
