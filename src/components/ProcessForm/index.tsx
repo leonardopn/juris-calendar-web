@@ -53,7 +53,6 @@ export function ProcessForm() {
 		async function createProcess() {
 			const process: Process = {
 				...data,
-				memorandums: [],
 				createdAt: new Date(),
 				updatedAt: new Date(),
 			};

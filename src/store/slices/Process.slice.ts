@@ -1,9 +1,8 @@
 import type { PayloadAction } from "@reduxjs/toolkit";
 import { createSlice } from "@reduxjs/toolkit";
+import update from "immutability-helper";
 import { Process } from "../../@types/Process";
 import { ProcessError } from "../../errors/ProcessError";
-import update from "immutability-helper";
-import { Memorandum } from "../../@types/Memorandum";
 
 interface ProcessState {
 	isFetching: boolean;
@@ -30,24 +29,6 @@ export const ProcessSlice = createSlice({
 				return update(state, { process: { $push: [action.payload] } });
 			}
 		},
-		addMemorandum: (
-			state,
-			action: PayloadAction<{ memorandum: Memorandum; processId: string }>
-		) => {
-			const processIndex = findIndex(state.process, action.payload.processId);
-			if (processIndex !== -1) {
-				const updatedProcess = update(state, {
-					process: {
-						[processIndex]: { memorandums: { $push: [action.payload.memorandum] } },
-					},
-				});
-				return update(updatedProcess, {
-					process: {
-						[processIndex]: { updatedAt: { $set: new Date() } },
-					},
-				});
-			}
-		},
 		setHasError: (state, action: PayloadAction<ProcessError>) =>
 			update(state, { error: { $set: action.payload } }),
 		setFetching: (state, action: PayloadAction<boolean>) =>
@@ -55,6 +36,6 @@ export const ProcessSlice = createSlice({
 	},
 });
 
-export const { addProcess, addMemorandum, setFetching, setHasError } = ProcessSlice.actions;
+export const { addProcess, setFetching, setHasError } = ProcessSlice.actions;
 
 export default ProcessSlice.reducer;
