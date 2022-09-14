@@ -1,28 +1,30 @@
-import { Memorandum } from "./Memorandum";
-import { Process } from "./Process";
-
 export interface Task {
 	id: string;
-	process: Process;
-	initialDate: Date;
-	finalDate: Date;
+	processId: string;
+	initialDate: string; //NOTE: Data em ISO
+	finalDate: string; //NOTE: Data em ISO
 	category: TaskCategory;
 	obs?: string;
-	memorandums: Memorandum[];
 	status: TaskStatus;
 	createdAt: Date;
 	updatedAt: Date;
 }
 
-export type TaskCategory =
-	| "PETIÇÃO_INICIAL"
-	| "PETIÇÃO_SIMPLES"
-	| "CONTESTAÇÃO"
-	| "RÉPLICA"
-	| "RECURSO"
-	| "CONTRARRAZÃO"
-	| "IMPUGNAÇÃO"
-	| "ENVIO_MEMORANDO"
-	| "CIÊNCIA";
+export enum TaskCategory {
+	"PETIÇÃO_INICIAL" = "Petição inicial",
+	"PETIÇÃO_SIMPLES" = "Petição simples",
+	"CONTESTAÇÃO" = "Contestação",
+	"RÉPLICA" = "Réplica",
+	"RECURSO" = "Recurso",
+	"CONTRARRAZÃO" = "Contrarrazão",
+	"IMPUGNAÇÃO" = "Impugnação",
+	"ENVIO_MEMORANDO" = "Envio de memorando",
+	"CIÊNCIA" = "Ciência",
+}
 
-export type TaskStatus = "NÃO_FEITO" | "A_REVISAR" | "PROTOCOLADO";
+export enum TaskStatus {
+	"NÃO_FEITO" = "Não feito",
+	"A_REVISAR" = "A revisar",
+	"PROTOCOLADO" = "Protocolado",
+	"OUTROS" = "Outros",
+}
