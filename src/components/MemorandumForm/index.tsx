@@ -18,8 +18,7 @@ import { toast } from "react-toastify";
 import { Memorandum } from "../../@types/Memorandum";
 import { useAppDispatch } from "../../hooks/useAppDispatch";
 import { useAppSelector } from "../../hooks/useAppSelector";
-import { addMemorandum } from "../../store/slices/Process.slice";
-
+import { addMemorandum } from "../../store/slices/Task.slice";
 import { MEMORANDUM_VALIDATION } from "../../utils/yup";
 import { Card } from "../Card";
 import { InputForm } from "../form/InputForm";
@@ -29,7 +28,7 @@ import { Header } from "../Header";
 interface AddMemorandumFormProps {
 	id: string;
 	destiny: string;
-	process: { label: string; value: string } | null;
+	task: { label: string; value: string } | null;
 	returnDate: string;
 }
 
@@ -43,22 +42,21 @@ export function MemorandumForm() {
 		defaultValues: {
 			id: "",
 			destiny: "",
-			process: null,
+			task: null,
 			returnDate: "",
 		},
 		resolver: yupResolver(MEMORANDUM_VALIDATION),
 	});
 	const dispatch = useAppDispatch();
-	const { process: processArray } = useAppSelector(state => state.process);
-	const process = useAppSelector(state => state.process.process);
+	const { tasks: taskArray } = useAppSelector(state => state.task);
 	const navigate = useNavigate();
 
-	const processOptions = useMemo(() => {
-		return processArray.map(process => ({
-			label: `${process.id} - Parte: ${process.part}, Assunto: ${process.subject}`,
-			value: process.id,
+	const taskOptions = useMemo(() => {
+		return taskArray.map(task => ({
+			label: `Tarefa: ${task.id} - Processo: ${task.processId}`,
+			value: task.id,
 		}));
-	}, [processArray]);
+	}, [taskArray]);
 
 	async function handleSubmitWithOutNavigate() {
 		await handleSubmit(onSubmit)();
@@ -66,7 +64,7 @@ export function MemorandumForm() {
 	}
 
 	const onSubmit: SubmitHandler<AddMemorandumFormProps> = async data => {
-		async function createProcess() {
+		async function createMemorandum() {
 			const memorandum: Memorandum = {
 				id: data.id,
 				isReturned: false,
@@ -76,26 +74,26 @@ export function MemorandumForm() {
 				updatedAt: new Date(),
 			};
 
-			const foundProcess = process.find(process => process.id === data.process?.value);
+			const foundTask = taskArray.find(task => task.id === data.task?.value);
 
-			if (foundProcess) {
-				const foundMemorandum = foundProcess.memorandums.find(
+			if (foundTask) {
+				const foundMemorandum = foundTask.memorandums.find(
 					memorandum => memorandum.id === memorandum.id
 				);
 
 				if (!foundMemorandum) {
-					dispatch(addMemorandum({ memorandum, processId: foundProcess.id }));
+					dispatch(addMemorandum({ memorandum, taskId: foundTask.id }));
 					reset();
 					navigate("/");
 				} else {
 					throw new Error("Memorando já cadastrado");
 				}
 			} else {
-				throw new Error("Processo não encontrado");
+				throw new Error("Tarefa não encontrada");
 			}
 		}
 
-		await toast.promise(createProcess, {
+		await toast.promise(createMemorandum, {
 			pending: "Criando Memorando",
 			success: "Memorando criado com sucesso",
 			error: {
@@ -130,11 +128,11 @@ export function MemorandumForm() {
 						/>
 						<SelectForm
 							control={control}
-							name="process"
-							label="Número do processo"
-							placeholder="Número do processo"
+							name="task"
+							label="Tarefa associada"
+							placeholder="Tarefa"
 							isClearable
-							options={processOptions}
+							options={taskOptions}
 						/>
 						<InputForm
 							label="Data de retorno"
