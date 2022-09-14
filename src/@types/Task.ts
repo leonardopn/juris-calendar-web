@@ -1,6 +1,9 @@
+import { Memorandum } from "./Memorandum";
+
 export interface Task {
 	id: string;
 	processId: string;
+	memorandums: Memorandum[];
 	initialDate: string; //NOTE: Data em ISO
 	finalDate: string; //NOTE: Data em ISO
 	category: TaskCategory;
