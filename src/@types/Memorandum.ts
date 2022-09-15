@@ -1,6 +1,6 @@
 export interface Memorandum {
 	id: string;
-	numero:string;
+	number: string;
 	destiny: string;
 	taskId: string;
 	returnDate: string; //NOTE: Em formato ISO

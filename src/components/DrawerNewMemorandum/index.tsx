@@ -58,7 +58,7 @@ export function DrawerNewMemorandum({
 		async function createMemorandum() {
 			const memorandum: MemorandumToCreate = {
 				id: v4(),
-				numero: data.numero,
+				number: data.numero,
 				isReturned: false,
 				destiny: data.destiny,
 				returnDate: data.returnDate,
@@ -68,7 +68,7 @@ export function DrawerNewMemorandum({
 
 			if (
 				!memorandums.find(
-					memorandum => memorandum.id === data.numero || memorandum.numero === data.numero
+					memorandum => memorandum.id === data.numero || memorandum.number === data.numero
 				)
 			) {
 				addMemorandum(memorandum);

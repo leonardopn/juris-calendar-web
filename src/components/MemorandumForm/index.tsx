@@ -69,7 +69,7 @@ export function MemorandumForm() {
 		async function createMemorandum() {
 			const memorandumToCreate: Memorandum = {
 				id: v4(),
-				numero: data.numero,
+				number: data.numero,
 				isReturned: false,
 				destiny: data.destiny,
 				returnDate: data.returnDate,
@@ -84,7 +84,7 @@ export function MemorandumForm() {
 				const foundMemorandum = memorandums.find(
 					memorandum =>
 						memorandum.id === memorandumToCreate.id ||
-						memorandum.numero === memorandumToCreate.numero
+						memorandum.number === memorandumToCreate.number
 				);
 
 				if (!foundMemorandum) {
