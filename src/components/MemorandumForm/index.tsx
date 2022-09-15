@@ -15,10 +15,11 @@ import { useMemo } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
+import { v4 } from "uuid";
 import { Memorandum } from "../../@types/Memorandum";
 import { useAppDispatch } from "../../hooks/useAppDispatch";
 import { useAppSelector } from "../../hooks/useAppSelector";
-import { addMemorandum } from "../../store/slices/Task.slice";
+import { addMemorandum } from "../../store/slices/Memorandum.slice";
 import { MEMORANDUM_VALIDATION } from "../../utils/yup";
 import { Card } from "../Card";
 import { InputForm } from "../form/InputForm";
@@ -26,7 +27,7 @@ import { SelectForm } from "../form/SelectForm";
 import { Header } from "../Header";
 
 interface AddMemorandumFormProps {
-	id: string;
+	numero: string;
 	destiny: string;
 	task: { label: string; value: string } | null;
 	returnDate: string;
@@ -40,15 +41,16 @@ export function MemorandumForm() {
 		formState: { isDirty, isSubmitting },
 	} = useForm<AddMemorandumFormProps>({
 		defaultValues: {
-			id: "",
+			numero: "",
 			destiny: "",
 			task: null,
 			returnDate: "",
 		},
-		resolver: yupResolver(MEMORANDUM_VALIDATION),
+		resolver: yupResolver(MEMORANDUM_VALIDATION({ task: true })),
 	});
 	const dispatch = useAppDispatch();
 	const { tasks: taskArray } = useAppSelector(state => state.task);
+	const { memorandums } = useAppSelector(state => state.memorandum);
 	const navigate = useNavigate();
 
 	const taskOptions = useMemo(() => {
@@ -65,24 +67,28 @@ export function MemorandumForm() {
 
 	const onSubmit: SubmitHandler<AddMemorandumFormProps> = async data => {
 		async function createMemorandum() {
-			const memorandum: Memorandum = {
-				id: data.id,
+			const memorandumToCreate: Memorandum = {
+				id: v4(),
+				numero: data.numero,
 				isReturned: false,
 				destiny: data.destiny,
 				returnDate: data.returnDate,
 				createdAt: new Date(),
 				updatedAt: new Date(),
+				taskId: data.task!.value,
 			};
 
 			const foundTask = taskArray.find(task => task.id === data.task?.value);
 
 			if (foundTask) {
-				const foundMemorandum = foundTask.memorandums.find(
-					memorandum => memorandum.id === memorandum.id
+				const foundMemorandum = memorandums.find(
+					memorandum =>
+						memorandum.id === memorandumToCreate.id ||
+						memorandum.numero === memorandumToCreate.numero
 				);
 
 				if (!foundMemorandum) {
-					dispatch(addMemorandum({ memorandum, taskId: foundTask.id }));
+					dispatch(addMemorandum(memorandumToCreate));
 					reset();
 					navigate("/");
 				} else {
@@ -117,7 +123,7 @@ export function MemorandumForm() {
 						<InputForm
 							label="Número do memorando"
 							control={control}
-							name="id"
+							name="numero"
 							placeholder="1350"
 						/>
 						<InputForm

@@ -15,23 +15,29 @@ import { DevTool } from "@hookform/devtools";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { toast } from "react-toastify";
-import { Memorandum } from "../../@types/Memorandum";
+import { v4 } from "uuid";
+import { Memorandum, MemorandumToCreate } from "../../@types/Memorandum";
 import { MEMORANDUM_VALIDATION } from "../../utils/yup";
 import { InputForm } from "../form/InputForm";
 import { Header } from "../Header";
 
 interface AddMemorandumFormProps {
-	id: string;
+	numero: string;
 	destiny: string;
 	returnDate: string;
 }
 
 interface DrawerNewMemorandumProps {
-	addMemorandum: (memorandum: Memorandum) => void;
+	addMemorandum: (memorandum: MemorandumToCreate) => void;
+	memorandums: Memorandum[] | MemorandumToCreate[];
 	drawerController: ReturnType<typeof useDisclosure>;
 }
 
-export function DrawerNewMemorandum({ addMemorandum, drawerController }: DrawerNewMemorandumProps) {
+export function DrawerNewMemorandum({
+	addMemorandum,
+	memorandums,
+	drawerController,
+}: DrawerNewMemorandumProps) {
 	const { isOpen, onClose } = drawerController;
 
 	const {
@@ -41,17 +47,18 @@ export function DrawerNewMemorandum({ addMemorandum, drawerController }: DrawerN
 		formState: { isDirty, isSubmitting },
 	} = useForm<AddMemorandumFormProps>({
 		defaultValues: {
-			id: "",
+			numero: "",
 			destiny: "",
 			returnDate: "",
 		},
-		resolver: yupResolver(MEMORANDUM_VALIDATION),
+		resolver: yupResolver(MEMORANDUM_VALIDATION()),
 	});
 
 	const onSubmit: SubmitHandler<AddMemorandumFormProps> = async data => {
 		async function createMemorandum() {
-			const memorandum: Memorandum = {
-				id: data.id,
+			const memorandum: MemorandumToCreate = {
+				id: v4(),
+				numero: data.numero,
 				isReturned: false,
 				destiny: data.destiny,
 				returnDate: data.returnDate,
@@ -59,23 +66,27 @@ export function DrawerNewMemorandum({ addMemorandum, drawerController }: DrawerN
 				updatedAt: new Date(),
 			};
 
-			addMemorandum(memorandum);
+			if (
+				!memorandums.find(
+					memorandum => memorandum.id === data.numero || memorandum.numero === data.numero
+				)
+			) {
+				addMemorandum(memorandum);
+				handleOnClose();
+			} else {
+				throw new Error("Memorando já cadastrado, tente outro número");
+			}
 		}
 
-		await toast
-			.promise(createMemorandum, {
-				pending: "Criando Memorando",
-				success: "Memorando criado com sucesso",
-				error: {
-					render({ data }) {
-						return data.message;
-					},
+		await toast.promise(createMemorandum, {
+			pending: "Criando Memorando",
+			success: "Memorando criado com sucesso",
+			error: {
+				render({ data }) {
+					return data.message;
 				},
-			})
-			.finally(() => {
-				reset();
-				onClose();
-			});
+			},
+		});
 	};
 
 	function handleOnClose() {
@@ -101,7 +112,7 @@ export function DrawerNewMemorandum({ addMemorandum, drawerController }: DrawerN
 							<InputForm
 								label="Número do memorando"
 								control={control}
-								name="id"
+								name="numero"
 								placeholder="1350"
 							/>
 							<InputForm
