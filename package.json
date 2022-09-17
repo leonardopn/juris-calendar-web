@@ -16,6 +16,7 @@
 		"@chakra-ui/react": "^2.3.2",
 		"@emotion/react": "^11.10.4",
 		"@emotion/styled": "^11.10.4",
+		"@fontsource/roboto": "^4.5.8",
 		"@hookform/devtools": "^4.2.2",
 		"@hookform/resolvers": "^2.9.8",
 		"@iconify/react": "^4.0.0",
