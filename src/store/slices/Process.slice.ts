@@ -25,7 +25,7 @@ export const ProcessSlice = createSlice({
 	initialState,
 	reducers: {
 		addProcess: (state, action: PayloadAction<Process>) => {
-			if (findIndex(state.process, action.payload.id) === -1) {
+			if (findIndex(state.process, action.payload.number) === -1) {
 				return update(state, { process: { $push: [action.payload] } });
 			}
 		},

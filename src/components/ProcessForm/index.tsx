@@ -14,18 +14,19 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
+import { v4 } from "uuid";
 import { Process } from "../../@types/Process";
 import { useAppDispatch } from "../../hooks/useAppDispatch";
 import { useAppSelector } from "../../hooks/useAppSelector";
 import { addProcess } from "../../store/slices/Process.slice";
-import { PROCESS_ID_MASK } from "../../utils/mask";
+import { PROCESS_NUMBER_MASK } from "../../utils/mask";
 import { PROCESS_VALIDATION } from "../../utils/yup";
 import { Card } from "../Card";
 import { InputForm } from "../form/InputForm";
 import { Header } from "../Header";
 
 interface AddProcessFormProps {
-	id: string;
+	number: string;
 	part: string;
 	subject: string;
 }
@@ -37,7 +38,7 @@ export function ProcessForm() {
 		reset,
 		formState: { isDirty, isSubmitting },
 	} = useForm<AddProcessFormProps>({
-		defaultValues: { id: "", part: "", subject: "" },
+		defaultValues: { number: "", part: "", subject: "" },
 		resolver: yupResolver(PROCESS_VALIDATION),
 	});
 	const dispatch = useAppDispatch();
@@ -53,11 +54,12 @@ export function ProcessForm() {
 		async function createProcess() {
 			const process: Process = {
 				...data,
+				id: v4(),
 				createdAt: new Date(),
 				updatedAt: new Date(),
 			};
 
-			const findProcess = processArray.find(p => p.id === process.id);
+			const findProcess = processArray.find(p => p.number === process.number);
 
 			if (!findProcess) {
 				dispatch(addProcess(process));
@@ -92,9 +94,9 @@ export function ProcessForm() {
 						<InputForm
 							label="Número do processo"
 							control={control}
-							name="id"
-							placeholder={PROCESS_ID_MASK.placeholder}
-							mask={PROCESS_ID_MASK}
+							name="number"
+							placeholder={PROCESS_NUMBER_MASK.placeholder}
+							mask={PROCESS_NUMBER_MASK}
 						/>
 						<InputForm
 							label="Parte do processo"

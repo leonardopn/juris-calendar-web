@@ -1,6 +1,6 @@
 import { PatternFormatProps } from "react-number-format";
 
-export const PROCESS_ID_MASK: PatternFormatProps = {
+export const PROCESS_NUMBER_MASK: PatternFormatProps = {
 	format: "XXXXXXX-XX.XXXX.X.XX.XXXX",
 	allowEmptyFormatting: true,
 	mask: "_",
