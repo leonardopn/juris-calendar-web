@@ -13,8 +13,8 @@ import { Link } from "react-router-dom";
 
 export function NavBar() {
 	return (
-		<VStack p={3} w="80" bg="purple.300" h="100vh" color="white" paddingY="10">
-			<Accordion allowToggle w="full">
+		<VStack p={3} w="80" bg="purple.300" minH="100vh" color="white" paddingY="10">
+			<Accordion allowToggle w="full" position="sticky" top="10">
 				<AccordionItem flex="1">
 					<Button
 						fontWeight="bold"
