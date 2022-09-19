@@ -56,7 +56,7 @@ export function DrawerNewMemorandum({
 
 	const onSubmit: SubmitHandler<AddMemorandumFormProps> = async data => {
 		async function createMemorandum() {
-			const memorandum: MemorandumToCreate = {
+			const memorandumToAdd: MemorandumToCreate = {
 				id: v4(),
 				number: data.numero,
 				isReturned: false,
@@ -66,12 +66,8 @@ export function DrawerNewMemorandum({
 				updatedAt: new Date(),
 			};
 
-			if (
-				!memorandums.find(
-					memorandum => memorandum.id === data.numero || memorandum.number === data.numero
-				)
-			) {
-				addMemorandum(memorandum);
+			if (!memorandums.find(memorandum => memorandum.number === data.numero)) {
+				addMemorandum(memorandumToAdd);
 				handleOnClose();
 			} else {
 				throw new Error("Memorando já cadastrado, tente outro número");
@@ -97,7 +93,12 @@ export function DrawerNewMemorandum({
 	return (
 		<Drawer size="xl" isOpen={isOpen} placement="right" onClose={handleOnClose}>
 			<DrawerOverlay />
-			<form onSubmit={handleSubmit(onSubmit)}>
+			<form
+				onSubmit={e => {
+					e.preventDefault();
+					e.stopPropagation();
+					handleSubmit(onSubmit)(e);
+				}}>
 				<DrawerContent>
 					<DrawerCloseButton />
 					<DrawerHeader borderBottomWidth="1px">
