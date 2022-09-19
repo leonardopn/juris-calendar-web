@@ -1,10 +1,10 @@
 import { Box } from "@chakra-ui/react";
-import { ProcessForm } from "../../../components/ProcessForm";
+import { TaskForm } from "../../../components/TaskForm";
 
 export function TaskNew() {
 	return (
 		<Box w="full">
-			<ProcessForm />
+			<TaskForm />
 		</Box>
 	);
 }
