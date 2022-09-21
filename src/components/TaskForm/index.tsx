@@ -35,6 +35,7 @@ import { Card } from "../Card";
 import { DrawerNewMemorandum } from "../DrawerNewMemorandum";
 import { InputForm } from "../form/InputForm";
 import { SelectForm } from "../form/SelectForm";
+import { TextAreaForm } from "../form/TextAreaForm";
 import { Header } from "../Header";
 import { MemorandumCard } from "../MemorandumCard";
 
@@ -116,6 +117,7 @@ export function TaskForm() {
 				processId: data.process!.value,
 				createdAt: new Date(),
 				updatedAt: new Date(),
+				obs: data.obs,
 			};
 
 			data.memorandums.forEach(memorandum => {
@@ -169,6 +171,7 @@ export function TaskForm() {
 							name="finalDate"
 							type="date"
 						/>
+
 						<SelectForm
 							control={control}
 							name="process"
@@ -193,6 +196,7 @@ export function TaskForm() {
 							isClearable
 							options={statusOptions}
 						/>
+						<TextAreaForm label="Observações" control={control} name="obs" />
 						<Button
 							leftIcon={<AddIcon />}
 							colorScheme="purple"
