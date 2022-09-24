@@ -1,3 +1,5 @@
+import { Process } from "./Process";
+
 export interface Task {
 	id: string;
 	processId: string;
@@ -8,6 +10,10 @@ export interface Task {
 	status: TaskStatus;
 	createdAt: Date;
 	updatedAt: Date;
+}
+
+export interface TaskWithProcess extends Task{
+	process: Process;
 }
 
 export enum TaskCategory {
