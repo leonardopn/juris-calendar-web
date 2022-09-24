@@ -1,18 +1,20 @@
 import "@fullcalendar/react/dist/vdom";
-import FullCalendar, { EventInput } from "@fullcalendar/react"; // must go before plugins
-import { Box, useDimensions } from "@chakra-ui/react";
+import FullCalendar, { EventClickArg, EventInput } from "@fullcalendar/react"; // must go before plugins
+import { Box, useDimensions, useDisclosure } from "@chakra-ui/react";
 import dayGridPlugin from "@fullcalendar/daygrid"; // a plugin!
 import interactionPlugin from "@fullcalendar/interaction";
 import listPlugin from "@fullcalendar/list";
 import timeGridPlugin from "@fullcalendar/timegrid";
 import { useMemo, useRef, useState } from "react";
 import { CalendarView } from "../../@types/Calendar";
-import { TaskCategory } from "../../@types/Task";
+import { Task, TaskCategory } from "../../@types/Task";
 import { useAppSelector } from "../../hooks/useAppSelector";
 import { CalendarToolbar } from "../CalendarToolbar";
+import { TaskModal } from "../TaskModal";
 
 export function TaskCalendar() {
 	const [date, setDate] = useState(new Date());
+	const [selectedTask, setSelectedTask] = useState<Task | null>(null);
 	const [view, setView] = useState<CalendarView>("dayGridMonth");
 
 	const calendarRef = useRef<FullCalendar>(null);
@@ -21,6 +23,8 @@ export function TaskCalendar() {
 
 	const { tasks } = useAppSelector(state => state.task);
 	const { process } = useAppSelector(state => state.process);
+
+	const modalController = useDisclosure();
 
 	const events = useMemo(
 		() =>
@@ -77,6 +81,11 @@ export function TaskCalendar() {
 		}
 	};
 
+	const handleSelectEvent = (arg: EventClickArg) => {
+		setSelectedTask(tasks.find(task => task.id === arg.event.id) || null);
+		modalController.onOpen();
+	};
+
 	return (
 		<Box w="full" h="full">
 			<CalendarToolbar
@@ -102,8 +111,10 @@ export function TaskCalendar() {
 					headerToolbar={false}
 					allDayMaintainDuration
 					eventResizableFromStart
+					eventClick={handleSelectEvent}
 					plugins={[listPlugin, dayGridPlugin, timeGridPlugin, interactionPlugin]}
 				/>
+				<TaskModal controller={modalController} task={selectedTask} />
 			</Box>
 		</Box>
 	);
